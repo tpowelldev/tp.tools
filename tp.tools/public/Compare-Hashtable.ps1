@@ -4,7 +4,7 @@ function Compare-Hashtable {
     Recursive hash table comparison function
 
     .DESCRIPTION
-    Recursively compares the key/vale (or only key) pairs of each hash table, returning differences,
+    Recursively compares the key/value (or only key) pairs of each hash table, returning differences,
     or optionally differences and matches
 
     .PARAMETER Reference
@@ -41,13 +41,20 @@ function Compare-Hashtable {
 
     param
     (
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
         [hashtable]$Reference,
+
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
         [hashtable]$Difference,
+
         [switch]$IncludeEqual,
+
         [switch]$KeysOnly
     )
 
-    # Need to recurse any nested keys, so create an internal function to do this
+    # Need to recurse any nested keys, create an internal function to do this
     function AnalyseHashTable {
         param (
             [hashtable]$Hash1,
@@ -114,7 +121,7 @@ function Compare-Hashtable {
                             }
                         }
                     } else {
-                        # Again, it it's a nested hashtable, recurse to the child
+                        # Again, if it's a nested hashtable, recurse to the child
                         if ($IncludeEqual) {
                             [pscustomobject]@{
                                 Key           = $parent+$rKey
